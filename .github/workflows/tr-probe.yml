@@ -23,7 +23,7 @@ jobs:
           BODY=$(echo "$HTTP_RESPONSE" | sed '$d')
 
           if [ "$HTTP_STATUS" != "200" ]; then
-            echo "$DETECTED_AT;error;http_$HTTP_STATUS" >> log.txt
+            echo "$DETECTED_AT;error;;;http_$HTTP_STATUS" >> log.csv
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "summary=Erro HTTP $HTTP_STATUS (detectado $DETECTED_AT)" >> "$GITHUB_OUTPUT"
             exit 0
@@ -33,16 +33,16 @@ jobs:
           LATEST_VALUE=$(echo "$BODY" | jq -r '.[-1].valor' 2>/dev/null || true)
 
           if [ -z "$LATEST_DATE" ] || [ "$LATEST_DATE" = "null" ]; then
-            echo "$DETECTED_AT;error;invalid_json" >> log.txt
+            echo "$DETECTED_AT;error;;;invalid_json" >> log.csv
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "summary=Resposta 200 mas JSON inválido (detectado $DETECTED_AT)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          LAST_OK_DATE=$(grep ';ok;' log.txt 2>/dev/null | tail -n 1 | cut -d';' -f3 || true)
+          LAST_OK_DATE=$(grep ';ok;' log.csv 2>/dev/null | tail -n 1 | cut -d';' -f3 || true)
 
           if [ "$LATEST_DATE" != "$LAST_OK_DATE" ]; then
-            echo "$DETECTED_AT;ok;$LATEST_DATE;$LATEST_VALUE" >> log.txt
+            echo "$DETECTED_AT;ok;$LATEST_DATE;$LATEST_VALUE;" >> log.csv
             mkdir -p snapshots
             echo "$BODY" > "snapshots/$LATEST_DATE.json"
             echo "changed=true" >> "$GITHUB_OUTPUT"
