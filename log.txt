@@ -1,1 +1,2 @@
-# detected_at_utc;reference_date;value
+# status "ok": detected_at_utc;ok;reference_date;value
+# status "error": detected_at_utc;error;detail
