@@ -17,9 +17,18 @@ jobs:
       - name: Check BC TR series
         id: check
         run: |
-          RESPONSE=$(curl -s "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados/ultimos/5?formato=json")
-          LATEST_DATE=$(echo "$RESPONSE" | jq -r '.[-1].data')
-          LATEST_VALUE=$(echo "$RESPONSE" | jq -r '.[-1].valor')
+          HTTP_RESPONSE=$(curl -sS -w '\n%{http_code}' "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados/ultimos/5?formato=json")
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | tail -n 1)
+          BODY=$(echo "$HTTP_RESPONSE" | sed '$d')
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "BC API returned HTTP $HTTP_STATUS"
+            echo "$BODY" | head -c 500
+            exit 1
+          fi
+
+          LATEST_DATE=$(echo "$BODY" | jq -r '.[-1].data')
+          LATEST_VALUE=$(echo "$BODY" | jq -r '.[-1].valor')
           DETECTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           LAST_LOGGED_DATE=""
