@@ -1,0 +1,47 @@
+name: TR probe
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check BC TR series
+        id: check
+        run: |
+          RESPONSE=$(curl -s "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados/ultimos/5?formato=json")
+          LATEST_DATE=$(echo "$RESPONSE" | jq -r '.[-1].data')
+          LATEST_VALUE=$(echo "$RESPONSE" | jq -r '.[-1].valor')
+          DETECTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          LAST_LOGGED_DATE=""
+          if [ -f log.txt ]; then
+            LAST_LOGGED_DATE=$(tail -n 1 log.txt | cut -d';' -f2)
+          fi
+
+          if [ "$LATEST_DATE" != "$LAST_LOGGED_DATE" ]; then
+            echo "$DETECTED_AT;$LATEST_DATE;$LATEST_VALUE" >> log.txt
+            echo "new_entry=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "new_entry=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "latest_date=$LATEST_DATE" >> "$GITHUB_OUTPUT"
+          echo "detected_at=$DETECTED_AT" >> "$GITHUB_OUTPUT"
+
+      - name: Commit log if changed
+        if: steps.check.outputs.new_entry == 'true'
+        run: |
+          git config user.name "tr-probe-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add log.txt
+          git commit -m "TR nova: ${{ steps.check.outputs.latest_date }} (detectada ${{ steps.check.outputs.detected_at }})"
+          git push
