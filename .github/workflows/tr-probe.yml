@@ -51,7 +51,8 @@ jobs:
           if [ "$LATEST_DATE" != "$LAST_OK_DATE" ]; then
             echo "$DETECTED_AT;ok;$LATEST_DATE;$LATEST_VALUE;" >> log.csv
             mkdir -p snapshots
-            echo "$BODY" > "snapshots/$LATEST_DATE.json"
+            SNAPSHOT_DATE=$(echo "$LATEST_DATE" | tr '/' '-')
+            echo "$BODY" > "snapshots/$SNAPSHOT_DATE.json"
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "summary=TR nova: $LATEST_DATE = $LATEST_VALUE (detectada $DETECTED_AT)" >> "$GITHUB_OUTPUT"
           else
