@@ -4,3 +4,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-08-11T05:11:54Z;error;;;http_502
 2026-08-11T15:00:30Z;error;;;invalid_json
 2026-08-12T01:13:02Z;ok;10/08/2026;0.1709;
+2026-08-12T13:14:57Z;ok;11/08/2026;0.1708;
