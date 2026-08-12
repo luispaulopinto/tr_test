@@ -18,7 +18,14 @@ jobs:
         id: check
         run: |
           DETECTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          HTTP_RESPONSE=$(curl -sS -w '\n%{http_code}' "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados/ultimos/5?formato=json")
+
+          if ! HTTP_RESPONSE=$(curl -sS -w '\n%{http_code}' "https://api.bcb.gov.br/dados/serie/bcdata.sgs.226/dados/ultimos/5?formato=json"); then
+            echo "$DETECTED_AT;error;;;curl_failed" >> log.csv
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "summary=Falha de conexão (detectado $DETECTED_AT)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           HTTP_STATUS=$(echo "$HTTP_RESPONSE" | tail -n 1)
           BODY=$(echo "$HTTP_RESPONSE" | sed '$d')
 
