@@ -7,3 +7,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-08-12T13:14:57Z;ok;11/08/2026;0.1708;
 2026-08-13T13:17:42Z;ok;12/08/2026;0.1708;
 2026-08-13T14:59:52Z;error;;;invalid_json
+2026-08-14T13:11:57Z;ok;13/08/2026;0.1691;
