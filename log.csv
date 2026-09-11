@@ -31,3 +31,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-09-08T14:58:44Z;ok;04/09/2026;0.1467;
 2026-09-09T13:33:09Z;ok;08/09/2026;0.1708;
 2026-09-10T13:24:01Z;ok;09/09/2026;0.1708;
+2026-09-11T14:53:36Z;error;;;invalid_json
