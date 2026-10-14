@@ -70,3 +70,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-10-09T15:55:11Z;ok;08/10/2026;0.1212;
 2026-10-13T15:40:41Z;ok;09/10/2026;0.0879;
 2026-10-13T21:02:24Z;error;;;invalid_json
+2026-10-14T16:46:58Z;ok;13/10/2026;0.1696;
