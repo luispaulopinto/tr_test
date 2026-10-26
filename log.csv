@@ -88,3 +88,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-10-22T14:55:20Z;ok;21/10/2026;0.1580;
 2026-10-23T14:43:52Z;ok;22/10/2026;0.1261;
 2026-10-24T00:22:53Z;error;;;invalid_json
+2026-10-26T03:52:01Z;error;;;invalid_json
