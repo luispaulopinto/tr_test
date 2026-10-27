@@ -90,3 +90,4 @@ detected_at_utc;status;reference_date;value;detail
 2026-10-24T00:22:53Z;error;;;invalid_json
 2026-10-26T03:52:01Z;error;;;invalid_json
 2026-10-26T16:38:15Z;ok;23/10/2026;0.0959;
+2026-10-27T14:08:44Z;error;;;invalid_json
